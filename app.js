@@ -31,5 +31,3 @@ app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/tours/users', userRouter);
 
 // 4. SERVER --> move to server.js
-
-module.exports = app;
