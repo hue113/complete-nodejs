@@ -9,6 +9,7 @@ const app = express();
 // 1. MiDDLEWARE
 app.use(morgan('dev'));
 app.use(express.json());
+app.use(express.static(`${__dirname}/public`));
 
 // convention naming: next; but you can name anything you want
 app.use((req, res, next) => {

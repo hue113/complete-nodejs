@@ -18,6 +18,16 @@ exports.checkID = (req, res, next, val) => {
   next();
 };
 
+exports.checkBody = (req, res, next) => {
+  if (!req.body.name || !req.body.price) {
+    return res.status(400).json({
+      status: 'fail',
+      message: 'Missing name or price',
+    });
+  }
+  next();
+};
+
 exports.getAllTours = (req, res) => {
   console.log(req.requestTime);
   res.status(200).json({
@@ -51,7 +61,7 @@ exports.createTour = (req, res) => {
   // tours = { ...tours, newTour };				// ko dung the nay (bz tours is constant, cannot assign new value)
 
   fs.writeFile(
-    `${__dirname}/dev-data/data/tours-simple.json`,
+    `${__dirname}/../dev-data/data/tours-simple.json`,
     JSON.stringify(tours),
     (err) => {
       res.status(201).json({
@@ -62,7 +72,7 @@ exports.createTour = (req, res) => {
       });
     }
   );
-  res.send('Done');
+  // res.send('Done');  // [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
 };
 
 exports.updateTour = (req, res) => {
@@ -78,7 +88,7 @@ exports.updateTour = (req, res) => {
   // updatedTours[index] = updatedTour; // updatedTours[tour.id] might not be index in different case
 
   fs.writeFile(
-    `${__dirname}/dev-data/data/tours-simple.json`,
+    `${__dirname}/../dev-data/data/tours-simple.json`,
     JSON.stringify(updatedTours),
     (err) => {
       res.status(200).json({
@@ -95,7 +105,7 @@ exports.deleteTour = (req, res) => {
   const id = parseInt(req.params.id);
   const updatedTours = tours.filter((tour) => tour.id !== id);
   fs.writeFile(
-    `${__dirname}/dev-data/data/tours-simple.json`,
+    `${__dirname}/../dev-data/data/tours-simple.json`,
     JSON.stringify(updatedTours),
     (err) => {
       res.status(204).json({
