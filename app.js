@@ -7,7 +7,7 @@ const userRouter = require('./routes/userRoutes');
 const app = express();
 
 // 1. MiDDLEWARE
-app.use(morgan('dev'));
+if (process.env.NODE_ENV === 'development') app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.static(`${__dirname}/public`));
 
@@ -31,3 +31,5 @@ app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/tours/users', userRouter);
 
 // 4. SERVER --> move to server.js
+
+module.exports = app;
