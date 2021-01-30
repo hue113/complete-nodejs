@@ -1,8 +1,10 @@
 const express = require('express');
 const morgan = require('morgan');
 
+const AppError = require('./utils/appError');
 const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
+const globalErrorHandler = require('./controllers/errorController');
 
 const app = express();
 
@@ -10,12 +12,6 @@ const app = express();
 if (process.env.NODE_ENV === 'development') app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.static(`${__dirname}/public`));
-
-// convention naming: next; but you can name anything you want
-app.use((req, res, next) => {
-  console.log('Hello from the middleware 👋');
-  next();
-});
 
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
@@ -29,6 +25,14 @@ app.use((req, res, next) => {
 // 3b. MOUNT multiple ROUTERS:
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/tours/users', userRouter);
+
+// Error Handling
+app.all('*', (req, res, next) => {
+  next(new AppError(`Can't find ${req.originalUrl} on this server`));
+});
+
+// Global Error Handler
+app.use(globalErrorHandler);
 
 // 4. SERVER --> move to server.js
 
