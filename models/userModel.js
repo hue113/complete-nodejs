@@ -61,6 +61,19 @@ userSchema.pre('save', async function (next) {
   next();
 });
 
+// middleware to update property passwordChangedAt
+// you can also put this in authController
+// but put here, so right before it's saved to db (automatically)
+userSchema.pre('save', function (next) {
+  if (!this.isModified('password') || this.isNew) return next();
+
+  // BUG: bz of delay, new token may be created a bit before the password TimeStamp
+  // that why we need to subtract 1s
+  // to prevent any time delays in creating the token and updating the changed at field
+  this.passwordChangedAt = Date.now() - 1000;
+  next();
+});
+
 // compare user password vs encrypted password in database
 userSchema.methods.correctPassword = async function (candidatePassword, userPassword) {
   return await bcrypt.compare(candidatePassword, userPassword);
