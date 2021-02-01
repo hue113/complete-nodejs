@@ -15,6 +15,11 @@ const userSchema = new mongoose.Schema({
     validate: [validator.isEmail, 'Please provide a valid email'],
   },
   photo: String,
+  role: {
+    type: String,
+    enum: ['user', 'guide', 'lead-guide', 'admin'],
+    default: 'user',
+  },
   password: {
     type: String,
     required: [true, 'Please provide a password'],
@@ -33,6 +38,13 @@ const userSchema = new mongoose.Schema({
     },
   },
   passwordChangedAt: Date,
+  passwordResetToken: String,
+  passwordResetExpires: Date,
+  // active: {
+  //   type: Boolean,
+  //   default: true,
+  //   select: false,
+  // },
 });
 
 // encrypt password before saving to database
@@ -48,17 +60,17 @@ userSchema.pre('save', async function (next) {
   next();
 });
 
+// compare user password vs encrypted password in database
 userSchema.methods.correctPassword = async function (candidatePassword, userPassword) {
   return await bcrypt.compare(candidatePassword, userPassword);
 };
 
+// check whether password was changed after the token created (means token is not valid anymore)
 userSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
   if (this.passwordChangedAt) {
     const changedTimestamp = parseInt(this.passwordChangedAt.getTime() / 1000, 10);
-
     return JWTTimestamp < changedTimestamp;
   }
-
   // False means NOT changed
   return false;
 };
