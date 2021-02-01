@@ -1,18 +1,19 @@
 const express = require('express');
-const fs = require('fs');
-
-const getAllUsers = (req, res) => {
-  res.status(200).json({
-    status: 'success',
-    requestedAt: req.requestTime,
-    results: users.length,
-    data: {
-      users,
-    },
-  });
-};
+const userController = require('../controllers/userController');
+const authController = require('../controllers/authController');
 
 const userRouter = express.Router();
+
+userRouter.post('/signup', authController.signup);
+userRouter.post('/login', authController.login);
+
+userRouter.route('/').get(userController.getAllUsers);
+// .post(userController.createTour);
+
+userRouter.route('/:id');
+// .get(userController.getTour)
+// .patch(userController.updateTour)
+// .delete(userController.deleteTour);
 
 // userRouter.route('/').get(getAllUsers).post(createUser);
 // userRouter.route('/:id').get(getUser).patch(updateUser).delete(deleteUser);

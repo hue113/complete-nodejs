@@ -24,7 +24,7 @@ app.use((req, res, next) => {
 // 3a. CREATE multiple ROUTERS --> move to Routes folder
 // 3b. MOUNT multiple ROUTERS:
 app.use('/api/v1/tours', tourRouter);
-app.use('/api/v1/tours/users', userRouter);
+app.use('/api/v1/users', userRouter);
 
 // Error Handling
 app.all('*', (req, res, next) => {
