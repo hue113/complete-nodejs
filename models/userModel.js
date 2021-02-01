@@ -41,11 +41,11 @@ const userSchema = new mongoose.Schema({
   passwordChangedAt: Date,
   passwordResetToken: String,
   passwordResetExpires: Date,
-  // active: {
-  //   type: Boolean,
-  //   default: true,
-  //   select: false,
-  // },
+  active: {
+    type: Boolean,
+    default: true,
+    select: false,
+  },
 });
 
 // encrypt password before saving to database
@@ -71,6 +71,14 @@ userSchema.pre('save', function (next) {
   // that why we need to subtract 1s
   // to prevent any time delays in creating the token and updating the changed at field
   this.passwordChangedAt = Date.now() - 1000;
+  next();
+});
+
+// look for string/words start with 'find'
+userSchema.pre(/^find/, function (next) {
+  // this points to the current query
+  this.find({ active: { $ne: false } }); // only find user that still active
+  // this.find({ active: true });   // same as above
   next();
 });
 
