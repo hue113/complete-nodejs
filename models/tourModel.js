@@ -2,6 +2,8 @@ const mongoose = require('mongoose');
 const slugify = require('slugify');
 // const validator = require('validator');
 
+// const User = require('./userModel');
+
 // 2. create a Schema
 const tourSchema = new mongoose.Schema(
   {
@@ -81,6 +83,36 @@ const tourSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    startLocation: {
+      // GeoJSON
+      type: {
+        type: String,
+        default: 'Point',
+        enum: ['Point'],
+      },
+      coordinates: [Number],
+      address: String,
+      description: String,
+    },
+    locations: [
+      {
+        type: {
+          type: String,
+          default: 'Point',
+          enum: ['Point'],
+        },
+        coordinates: [Number],
+        address: String,
+        description: String,
+        day: Number,
+      },
+    ],
+    guides: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: 'User',
+      },
+    ],
   },
   {
     toJSON: { virtuals: true },
@@ -92,6 +124,13 @@ tourSchema.virtual('durationWeeks').get(function () {
   return this.duration / 7;
 });
 
+// Virtual Populate
+tourSchema.virtual('reviews', {
+  ref: 'Review',
+  foreignField: 'tour', // name of field in other model
+  localField: '_id',
+});
+
 // DOCUMENT MIDDLEWARE: runs before .save() and .create(); not on update()
 // pre-save middleware
 tourSchema.pre('save', function (next) {
@@ -100,15 +139,25 @@ tourSchema.pre('save', function (next) {
   next();
 });
 
+// pre-save middleware for EMBEDDING 'GUIDES' to database
+// tourSchema.pre('save', async function (next) {
+//   const guidesPromises = this.guides.map(async (id) => await User.findById(id)); // JONAS
+//   // map function doesn't support async function
+//   // this case it returns multiple database queries (findById)
+//   // need to use await Promise.all()
+//   this.guides = await Promise.all(guidesPromises);
+//   next();
+// });
+
 // pre-save middleware
-// eslint-disable-next-line prefer-arrow-callback
+// // eslint-disable-next-line prefer-arrow-callback
 // tourSchema.pre('save', function (next) {
 //   console.log('Will save document...');
 //   next();
 // });
 
 // post middleware
-// eslint-disable-next-line prefer-arrow-callback
+// // eslint-disable-next-line prefer-arrow-callback
 // tourSchema.post('save', function (doc, next) {
 //   console.log(doc);
 //   next();
@@ -120,6 +169,16 @@ tourSchema.pre(/^find/, function (next) {
   this.find({ secretTour: { $ne: true } });
 
   this.start = Date.now();
+  next();
+});
+
+// populate all documents
+tourSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: 'guides',
+    select: '-__v -passwordChangedAt',
+  });
+
   next();
 });
 
