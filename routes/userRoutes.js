@@ -6,24 +6,27 @@ const userRouter = express.Router();
 
 userRouter.post('/signup', authController.signup);
 userRouter.post('/login', authController.login);
-
 userRouter.post('/forgotPassword', authController.forgotPassword);
 userRouter.patch('/resetPassword/:token', authController.resetPassword);
 
+// Middleware run in sequence --> put authController.protect here
+// will require authentication for all middleware below
+userRouter.use(authController.protect); // Protect all routes after this middleware
+
 userRouter.patch('/updateMyPassword', authController.protect, authController.updatePassword);
+userRouter.get('/me', userController.getMe, userController.getUser);
+userRouter.patch('/updateMe', userController.updateMe);
+userRouter.delete('/deleteMe', userController.deleteMe);
 
-userRouter.patch('/updateMe', authController.protect, userController.updateMe);
-userRouter.delete('/deleteMe', authController.protect, userController.deleteMe);
+// restrict to admin for all middleware below
+userRouter.use(authController.restrictTo('admin'));
 
-userRouter.route('/').get(userController.getAllUsers);
-// .post(userController.createTour);
+userRouter.route('/').get(userController.getAllUsers).post(userController.createUser);
 
-userRouter.route('/:id');
-// .get(userController.getTour)
-// .patch(userController.updateTour)
-// .delete(userController.deleteTour);
-
-// userRouter.route('/').get(getAllUsers).post(createUser);
-// userRouter.route('/:id').get(getUser).patch(updateUser).delete(deleteUser);
+userRouter
+  .route('/:id')
+  .get(userController.getUser)
+  .patch(userController.updateUser)
+  .delete(userController.deleteUser);
 
 module.exports = userRouter;
