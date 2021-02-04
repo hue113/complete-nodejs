@@ -70,7 +70,6 @@ exports.login = catchAsync(async (req, res, next) => {
 });
 
 exports.protect = catchAsync(async (req, res, next) => {
-  console.log('reach protect');
   // 1) Get token and check if it exists
   let token;
   if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
@@ -83,7 +82,7 @@ exports.protect = catchAsync(async (req, res, next) => {
 
   // 2) Verify token
   const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
-  console.log('decoded', decoded);
+  // console.log('decoded', decoded);
 
   // 3) Check if user still exists
   const currentUser = await User.findById(decoded.id);
