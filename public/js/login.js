@@ -1,6 +1,14 @@
 /* eslint-disable */
-import axios from 'axios';
+// import axios from 'axios';
 import { showAlert } from './alerts';
+
+document.querySelector('.form').addEventListener('submit', (e) => {
+  console.log('hello');
+  e.preventDefault();
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+  login(email, password);
+});
 
 export const login = async (email, password) => {
   console.log(email, password);
