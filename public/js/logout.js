@@ -2,40 +2,7 @@
 // import axios from 'axios';
 // import { showAlert } from './alerts.js';
 
-console.log('Hello from login.js');
-//=======LOG IN========
-const login = async (email, password) => {
-  // console.log('login', email, password);
-  try {
-    const res = await axios({
-      method: 'POST',
-      url: 'http://localhost:3000/api/v1/users/login',
-      data: {
-        email,
-        password,
-      },
-    });
-
-    if (res.data.status === 'success') {
-      showAlert('success', 'Logged in successfully!');
-      location.assign('/');
-      // window.setTimeout(() => {
-      //   location.assign('/');
-      // }, 1000);
-    }
-  } catch (err) {
-    showAlert('error', err.response.data.message);
-    console.log(err.response.data);
-  }
-};
-
-document.querySelector('.form--login').addEventListener('submit', (e) => {
-  e.preventDefault();
-  const email = document.getElementById('email').value;
-  const password = document.getElementById('password').value;
-  login(email, password);
-});
-
+console.log('Hello from logout.js');
 //=======LOG OUT========
 const logout = async () => {
   try {
@@ -54,11 +21,6 @@ const logout = async () => {
 };
 const logOutBtn = document.querySelector('.nav__el--logout');
 if (logOutBtn) logOutBtn.addEventListener('click', logout);
-// if (logOutBtn)
-// logOutBtn.addEventListener('click', (e) => {
-//   e.preventDefault();
-//   logout();
-// });
 // document.querySelector('.nav__el--logout').addEventListener('click', (e) => {
 //   e.preventDefault();
 //   logout();
