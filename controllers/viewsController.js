@@ -41,9 +41,15 @@ exports.getTour = catchAsync(async (req, res, next) => {
 });
 
 exports.getLoginForm = (req, res) => {
-  res.status(200).render('login', {
-    title: 'Log into your account',
-  });
+  res
+    .status(200)
+    // .set(
+    //   'Content-Security-Policy',
+    //   "script-src 'self' https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js 'unsafe-inline' 'unsafe-eval';",
+    // )
+    .render('login', {
+      title: 'Log into your account',
+    });
 };
 
 exports.getAccount = (req, res) => {
