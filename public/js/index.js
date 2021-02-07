@@ -26,7 +26,7 @@ const login = async (email, password) => {
     }
   } catch (err) {
     showAlert('error', err.response.data.message);
-    console.log(err.response.data);
+    // console.log(err.response.data);
   }
 };
 
@@ -51,7 +51,7 @@ const logout = async () => {
       location.assign('/login');
     }
   } catch (err) {
-    console.log(err);
+    // console.log(err);
     showAlert('error', 'Error logging out! Try again.');
   }
 };
@@ -61,13 +61,11 @@ if (logOutBtn) logOutBtn.addEventListener('click', logout);
 
 //=======UPDATE=======
 const updateSettings = async (data, type) => {
-  console.log('inside updateSettings');
   try {
     const url =
       type === 'password'
-        ? 'http://127.0.0.1:3000/api/v1/users/updateMyPassword'
-        : 'http://127.0.0.1:3000/api/v1/users/updateMe';
-    console.log('url', url);
+        ? 'http://localhost:3000/api/v1/users/updateMyPassword'
+        : 'http://localhost:3000/api/v1/users/updateMe';
     const res = await axios({
       method: 'PATCH',
       url,
@@ -78,15 +76,13 @@ const updateSettings = async (data, type) => {
       showAlert('success', `${type.toUpperCase()} updated successfully!`);
     }
   } catch (err) {
-    console.log(err.response);
-    console.log(err);
-    // showAlert('error', err.response.data.message);
+    // console.log(err.response);
+    showAlert('error', err.response.data.message);
   }
 };
 
 const userDataForm = document.querySelector('.form-user-data');
 if (userDataForm) {
-  console.log('userDataForm');
   userDataForm.addEventListener('submit', (e) => {
     e.preventDefault();
 
@@ -99,7 +95,6 @@ if (userDataForm) {
 
 const userPasswordForm = document.querySelector('.form-user-password');
 if (userPasswordForm) {
-  console.log('password form');
   userPasswordForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     document.querySelector('.btn--save-password').textContent = 'Updating...';
