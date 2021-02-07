@@ -1,9 +1,9 @@
 /* eslint-disable */
-console.log('Hello Hue');
+console.log('Hello from mapbox');
 const locations = JSON.parse(document.getElementById('map').dataset.locations);
-console.log(locations);
+// console.log(locations);
 
-export const displayMap = (location) => {
+const displayMap = (locations) => {
   mapboxgl.accessToken =
     'pk.eyJ1IjoiaHVlcHQ5MiIsImEiOiJja2tzejZuMDgwY3Q4Mndxb3ZhcndvbjdyIn0.95arHl19VG6HRTnTF25L5g';
   var map = new mapboxgl.Map({
@@ -54,3 +54,5 @@ export const displayMap = (location) => {
     },
   });
 };
+
+displayMap(locations);
