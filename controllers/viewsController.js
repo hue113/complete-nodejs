@@ -33,6 +33,7 @@ exports.getTour = catchAsync(async (req, res, next) => {
     .set(
       'Content-Security-Policy',
       'connect-src https://*.tiles.mapbox.com https://api.mapbox.com https://events.mapbox.com',
+      // "script-src 'self' https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js 'unsafe-inline' 'unsafe-eval';",
     )
     .render('tour', {
       title: `${tour.name} Tour`,
@@ -45,7 +46,7 @@ exports.getLoginForm = (req, res) => {
     .status(200)
     // .set(
     //   'Content-Security-Policy',
-    //   "script-src 'self' https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js 'unsafe-inline' 'unsafe-eval';",
+    //   "script-src 'self' https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js 'unsafe-inline' 'unsafe-eval';",
     // )
     .render('login', {
       title: 'Log into your account',
@@ -59,16 +60,11 @@ exports.getAccount = (req, res) => {
 };
 
 exports.updateUserData = catchAsync(async (req, res, next) => {
+  console.log(req.body);
   const updatedUser = await User.findByIdAndUpdate(
     req.user.id,
-    {
-      name: req.body.name,
-      email: req.body.email,
-    },
-    {
-      new: true,
-      runValidators: true,
-    },
+    { name: req.body.name, email: req.body.email },
+    { new: true, runValidators: true },
   );
 
   res.status(200).render('account', {
