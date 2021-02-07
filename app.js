@@ -28,6 +28,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(
   cors({
     origin: 'http://127.0.0.1:3000',
+    // origin: true,
     credentials: true,
   }),
 );
@@ -35,16 +36,21 @@ app.use(
 // Set security HTTP headers
 // app.use(helmet());
 app.use(
-  helmet.contentSecurityPolicy({
-    directives: {
-      defaultSrc: ["'self'", 'https:', 'http:', 'data:', 'ws:'],
-      baseUri: ["'self'"],
-      fontSrc: ["'self'", 'https:', 'http:', 'data:'],
-      scriptSrc: ["'self'", 'https:', 'http:', 'blob:'],
-      styleSrc: ["'self'", "'unsafe-inline'", 'https:', 'http:'],
-    },
+  helmet({
+    contentSecurityPolicy: false,
   }),
 );
+// app.use(
+//   helmet.contentSecurityPolicy({
+//     directives: {
+//       defaultSrc: ["'self'", 'https:', 'http:', 'data:', 'ws:'],
+//       baseUri: ["'self'"],
+//       fontSrc: ["'self'", 'https:', 'http:', 'data:'],
+//       scriptSrc: ["'self'", 'https:', 'http:', 'blob:'],
+//       styleSrc: ["'self'", "'unsafe-inline'", 'https:', 'http:'],
+//     },
+//   }),
+// );
 
 // Development logging
 if (process.env.NODE_ENV === 'development') app.use(morgan('dev'));
@@ -59,6 +65,7 @@ app.use('/api', limiter); // apply with any route start with /api --> means all 
 
 // Body parser, reading data from body into req.body
 app.use(express.json({ limit: '10kb' }));
+app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 app.use(cookieParser());
 
 // Data sanitization against NoSQL query injection (clean characters: $, .)
