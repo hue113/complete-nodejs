@@ -16,7 +16,12 @@ userRouter.use(authController.protect); // Protect all routes after this middlew
 
 userRouter.patch('/updateMyPassword', authController.protect, authController.updatePassword);
 userRouter.get('/me', userController.getMe, userController.getUser);
-userRouter.patch('/updateMe', userController.updateMe);
+userRouter.patch(
+  '/updateMe',
+  userController.uploadUserPhoto,
+  userController.resizeUserPhoto,
+  userController.updateMe,
+);
 userRouter.delete('/deleteMe', userController.deleteMe);
 
 // restrict to admin for all middleware below
