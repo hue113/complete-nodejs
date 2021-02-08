@@ -7,7 +7,9 @@ module.exports = class Email {
     this.to = user.email;
     this.firstName = user.name.split(' ')[0];
     this.url = url;
-    this.from = `Hue Pham <${process.env.EMAIL_FROM}>`;
+    if (process.env.NODE_ENV === 'production') {
+      this.from = `Hue Pham <${process.env.SENDGRID_EMAIL_FROM}>`;
+    } else this.from = `Hue Pham <${process.env.EMAIL_FROM}>`;
   }
 
   // check
@@ -46,6 +48,7 @@ module.exports = class Email {
     // 2) Define email options
     const mailOptions = {
       from: this.from,
+      // from: process.env.SENDGRID_EMAIL_FROM,
       to: this.to,
       subject,
       html,
