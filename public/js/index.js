@@ -1,10 +1,33 @@
 /* eslint-disable */
-// import axios from 'axios';
+import axios from 'axios';
 // import { showAlert } from './alerts.js';
+import { displayMap } from './mapbox';
+import '@babel/polyfill';
 
 console.log('Hello from index.js');
 
-//======= LOG IN========
+//======= MAP =======
+const mapBox = document.getElementById('map');
+if (mapBox) {
+  const locations = JSON.parse(mapBox.dataset.locations);
+  displayMap(locations);
+}
+
+//======= ALERT =======
+const hideAlert = () => {
+  const el = document.querySelector('.alert');
+  if (el) el.parentElement.removeChild(el);
+};
+
+// type is 'success' or 'error'
+const showAlert = (type, msg) => {
+  hideAlert();
+  const markup = `<div class="alert alert--${type}">${msg}</div>`;
+  document.querySelector('body').insertAdjacentHTML('afterbegin', markup);
+  window.setTimeout(hideAlert, 5000);
+};
+
+//======= LOG IN ========
 const login = async (email, password) => {
   // console.log('login', email, password);
   try {
@@ -39,7 +62,7 @@ if (loginForm)
     login(email, password);
   });
 
-//=======LOG OUT========
+//======= LOG OUT ========
 const logout = async () => {
   try {
     const res = await axios({
@@ -59,7 +82,7 @@ const logout = async () => {
 const logOutBtn = document.querySelector('.nav__el--logout');
 if (logOutBtn) logOutBtn.addEventListener('click', logout);
 
-//=======UPDATE=======
+//======= UPDATE =======
 const updateSettings = async (data, type) => {
   try {
     const url =
@@ -117,16 +140,33 @@ if (userPasswordForm) {
   });
 }
 
-//=======ALERT=======
-const hideAlert = () => {
-  const el = document.querySelector('.alert');
-  if (el) el.parentElement.removeChild(el);
+//======= STRIPE =======
+// const Stripe = require('stripe');
+const stripe = Stripe(
+  'pk_test_51HzlQ4FD0x4Cf1q082I8zPeNMLHJAnc0Z9omFu6GVpvNlBvMpqIizld3SBGcUKyKTpNhYRqZxNhmzY3pxEMXf5Qa00hQiaolC5',
+);
+
+const bookTour = async (tourId) => {
+  console.log('inside bookTour', tourId);
+  try {
+    // 1) Get checkout session from API
+    const session = await axios(`http://localhost:3000/api/v1/bookings/checkout-session/${tourId}`);
+    console.log(session);
+
+    // 2) Create checkout form + charge credit card
+    await stripe.redirectToCheckout({
+      sessionId: session.data.session.id,
+    });
+  } catch (err) {
+    console.log(err);
+    showAlert('error', err);
+  }
 };
 
-// type is 'success' or 'error'
-const showAlert = (type, msg) => {
-  hideAlert();
-  const markup = `<div class="alert alert--${type}">${msg}</div>`;
-  document.querySelector('body').insertAdjacentHTML('afterbegin', markup);
-  window.setTimeout(hideAlert, 5000);
-};
+const bookBtn = document.getElementById('book-tour');
+if (bookBtn)
+  bookBtn.addEventListener('click', (e) => {
+    e.target.textContent = 'Processing...';
+    const { tourId } = e.target.dataset;
+    bookTour(tourId);
+  });
