@@ -1,8 +1,17 @@
 /* eslint-disable */
 // import axios from 'axios';
 // import { showAlert } from './alerts.js';
+// import { displayMap } from './mapbox';
+// import '@babel/polyfill';
 
 console.log('Hello from index.js');
+
+//======= MAP =======
+const mapBox = document.getElementById('map');
+if (mapBox) {
+  const locations = JSON.parse(mapBox.dataset.locations);
+  displayMap(locations);
+}
 
 //======= ALERT =======
 const hideAlert = () => {

@@ -1,5 +1,6 @@
 const Stripe = require('stripe');
 const Tour = require('../models/tourModel');
+// const User = require('../models/userModel');
 const Booking = require('../models/bookingModel');
 const catchAsync = require('../utils/catchAsync');
 const factory = require('./handlerFactory');
@@ -38,6 +39,7 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
   });
 });
 
+// JONAS:
 exports.createBookingCheckout = catchAsync(async (req, res, next) => {
   // This is only TEMPORARY, because it's UNSECURE: everyone can make bookings without paying
   const { tour, user, price } = req.query;
@@ -47,6 +49,15 @@ exports.createBookingCheckout = catchAsync(async (req, res, next) => {
 
   res.redirect(req.originalUrl.split('?')[0]);
 });
+
+// exports.createBookingCheckout = async (sessionData) => {
+//   console.log(sessionData);
+//   const tour = sessionData.client_reference_id;
+//   const user = await User.findOne({ email: sessionData.customer_email });
+//   // const price = sessionData.line_items[0].amount / 100;
+//   const price = sessionData.amount_total / 100;
+//   await Booking.create({ tour, user: user.id, price });
+// };
 
 exports.createBooking = factory.createOne(Booking);
 exports.getBooking = factory.getOne(Booking);
