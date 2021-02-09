@@ -1,8 +1,8 @@
 /* eslint-disable */
-// import axios from 'axios';
+import axios from 'axios';
 // import { showAlert } from './alerts.js';
-// import { displayMap } from './mapbox';
-// import '@babel/polyfill';
+import { displayMap } from './mapbox';
+import '@babel/polyfill';
 
 console.log('Hello from index.js');
 
@@ -141,7 +141,7 @@ if (userPasswordForm) {
 }
 
 //======= STRIPE =======
-const Stripe = require('stripe');
+// const Stripe = require('stripe');
 const stripe = Stripe(
   'pk_test_51HzlQ4FD0x4Cf1q082I8zPeNMLHJAnc0Z9omFu6GVpvNlBvMpqIizld3SBGcUKyKTpNhYRqZxNhmzY3pxEMXf5Qa00hQiaolC5',
 );
