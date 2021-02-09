@@ -16,16 +16,24 @@ const signToken = (id) => {
 
 const createSendToken = (user, statusCode, res) => {
   const token = signToken(user._id);
-  const cookieOptions = {
-    expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000),
-    httpOnly: true, // means cookies cannot be accessed/modified by browser
-  };
+  // const cookieOptions = {
+  //   expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000),
+  //   httpOnly: true, // means cookies cannot be accessed/modified by browser
+  // };
 
   // Only activate 'secure=true' in production
   // means only send cookies to encrypted connection (only https)
-  if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
+  // if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
 
-  res.cookie('jwt', token, cookieOptions);
+  // res.cookie('jwt', token, cookieOptions);
+
+  res.cookie('jwt', token, {
+    expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000),
+    httpOnly: true,
+    // eslint-disable-next-line no-undef
+    secure: req.secure || req.headers['x-forwarded-proto'] === 'https',
+    // secure: req.secure || req.get('x-forwarded-proto') === 'https',
+  });
 
   // Remove password from output (body)
   user.password = undefined;
