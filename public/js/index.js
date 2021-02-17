@@ -7,11 +7,11 @@
 console.log('Hello from index.js');
 
 //======= MAP =======
-const mapBox = document.getElementById('map');
-if (mapBox) {
-  const locations = JSON.parse(mapBox.dataset.locations);
-  displayMap(locations);
-}
+// const mapBox = document.getElementById('map');
+// if (mapBox) {
+//   const locations = JSON.parse(mapBox.dataset.locations);
+//   displayMap(locations);
+// }
 
 //======= ALERT =======
 const hideAlert = () => {
@@ -141,7 +141,7 @@ if (userPasswordForm) {
 }
 
 //======= STRIPE =======
-const Stripe = require('stripe');
+// const Stripe = require('stripe');
 const stripe = Stripe(
   'pk_test_51HzlQ4FD0x4Cf1q082I8zPeNMLHJAnc0Z9omFu6GVpvNlBvMpqIizld3SBGcUKyKTpNhYRqZxNhmzY3pxEMXf5Qa00hQiaolC5',
 );
