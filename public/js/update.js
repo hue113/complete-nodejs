@@ -10,7 +10,7 @@ module.exports.updateSettings = async (data, type) => {
       url,
       data,
     });
-    console.log('res', res);
+    // console.log('res', res);
     if (res.data.status === 'success') {
       showAlert('success', `${type.toUpperCase()} updated successfully!`);
     }

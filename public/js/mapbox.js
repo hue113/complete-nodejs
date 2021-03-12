@@ -1,8 +1,8 @@
 /* eslint-disable */
 $(document).ready(() => {
-  console.log('Hello from mapbox');
+  // console.log('Hello from mapbox');
   const locations = JSON.parse(document.getElementById('map').dataset.locations);
-  console.log(locations);
+  // console.log(locations);
 
   const displayMap = (locations) => {
     mapboxgl.accessToken =

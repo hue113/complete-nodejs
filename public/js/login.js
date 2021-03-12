@@ -2,7 +2,7 @@
 const { showAlert } = require('./alerts');
 
 module.exports.login = async (email, password) => {
-  console.log('login', email, password);
+  // console.log('login', email, password);
   try {
     const res = await axios({
       method: 'POST',
