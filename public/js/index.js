@@ -4,6 +4,7 @@ const { login, logout } = require('./login.js');
 const { updateSettings } = require('./update');
 const { bookTour } = require('./stripe.js');
 // import '@babel/polyfill';
+
 console.log('Hello from index.js');
 
 //======= MAP =======
@@ -59,26 +60,6 @@ if (userPasswordForm) {
 
 //======= STRIPE =======
 // const Stripe = require('stripe');
-// const stripe = Stripe(
-//   'pk_test_51HzlQ4FD0x4Cf1q082I8zPeNMLHJAnc0Z9omFu6GVpvNlBvMpqIizld3SBGcUKyKTpNhYRqZxNhmzY3pxEMXf5Qa00hQiaolC5',
-// );
-
-// const bookTour = async (tourId) => {
-//   console.log('inside bookTour', tourId);
-//   try {
-//     // 1) Get checkout session from API
-//     const session = await axios(`http://localhost:3000/api/v1/bookings/checkout-session/${tourId}`);
-//     console.log(session);
-
-//     // 2) Create checkout form + charge credit card
-//     await stripe.redirectToCheckout({
-//       sessionId: session.data.session.id,
-//     });
-//   } catch (err) {
-//     console.log(err);
-//     showAlert('error', err);
-//   }
-// };
 
 const bookBtn = document.getElementById('book-tour');
 if (bookBtn)
