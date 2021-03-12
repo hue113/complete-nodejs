@@ -9,6 +9,7 @@ const hpp = require('hpp');
 const cookieParser = require('cookie-parser');
 const compression = require('compression');
 const cors = require('cors');
+const compression = require('compression');
 
 const AppError = require('./utils/appError');
 const tourRouter = require('./routes/tourRoutes');
@@ -20,7 +21,7 @@ const globalErrorHandler = require('./controllers/errorController');
 
 const app = express();
 
-app.enable('trust proxy');
+app.enable('trust proxy'); // to make application trust proxy (heroku deploy)
 
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
@@ -31,14 +32,15 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Implement CORS
 app.use(cors());
-// Access-Control-Allow-Origin *
 // app.use(
 //   cors({
-//   origin: 'https://www.natours.com'
+//     origin: 'http://localhost:3000',
 //     // origin: true,
 //     credentials: true,
 //   }),
 // );
+app.options('*', cors());
+// app.options('/api/v1/tours/:id', cors());
 
 // Set security HTTP headers
 // app.use(helmet());
@@ -103,6 +105,9 @@ app.use((req, res, next) => {
   // console.log('req', req.cookies);
   next();
 });
+
+// middleware to compress all text sent to client
+app.use(compression());
 
 // 2. ROUTE HANDLERS --> move to Controllers folders
 

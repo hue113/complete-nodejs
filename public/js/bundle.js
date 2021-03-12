@@ -113,7 +113,7 @@ module.exports.login = async (email, password) => {
   try {
     const res = await axios({
       method: 'POST',
-      url: 'http://localhost:3000/api/v1/users/login',
+      url: '/api/v1/users/login',
       data: {
         email,
         password,
@@ -137,7 +137,7 @@ module.exports.logout = async () => {
   try {
     const res = await axios({
       method: 'GET',
-      url: 'http://localhost:3000/api/v1/users/logout',
+      url: '/api/v1/users/logout',
     });
     if (res.data.status === 'success') {
       location.reload();
@@ -182,10 +182,7 @@ const { showAlert } = require('./alerts');
 
 module.exports.updateSettings = async (data, type) => {
   try {
-    const url =
-      type === 'password'
-        ? 'http://localhost:3000/api/v1/users/updateMyPassword'
-        : 'http://localhost:3000/api/v1/users/updateMe';
+    const url = type === 'password' ? '/api/v1/users/updateMyPassword' : '/api/v1/users/updateMe';
     const res = await axios({
       method: 'PATCH',
       url,
