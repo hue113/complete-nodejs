@@ -3,9 +3,8 @@
 const { login, logout } = require('./login.js');
 const { updateSettings } = require('./update');
 const { bookTour } = require('./stripe.js');
-// import '@babel/polyfill';
 
-console.log('Hello from index.js');
+// console.log('Hello from index.js');
 
 //======= MAP =======
 
@@ -59,8 +58,6 @@ if (userPasswordForm) {
 }
 
 //======= STRIPE =======
-// const Stripe = require('stripe');
-
 const bookBtn = document.getElementById('book-tour');
 if (bookBtn)
   bookBtn.addEventListener('click', (e) => {
@@ -68,3 +65,6 @@ if (bookBtn)
     const { tourId } = e.target.dataset;
     bookTour(tourId);
   });
+
+const alertMessage = document.querySelector('body').dataset.alert;
+if (alertMessage) showAlert('success', alertMessage, 20);
