@@ -3,6 +3,7 @@
 const { login, logout } = require('./login.js');
 const { updateSettings } = require('./update');
 const { bookTour } = require('./stripe.js');
+
 // console.log('Hello from index.js');
 
 //======= MAP =======

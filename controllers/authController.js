@@ -30,6 +30,7 @@ const createSendToken = (user, statusCode, req, res) => {
     expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000),
     httpOnly: true,
     // this is for heroku set up
+
     secure: req.secure || req.headers['x-forwarded-proto'] === 'https',
     // secure: req.secure || req.get('x-forwarded-proto') === 'https',
   });
