@@ -14,7 +14,7 @@ const signToken = (id) => {
   });
 };
 
-const createSendToken = (user, statusCode, res) => {
+const createSendToken = (user, statusCode, req, res) => {
   const token = signToken(user._id);
   // const cookieOptions = {
   //   expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000),
@@ -26,11 +26,11 @@ const createSendToken = (user, statusCode, res) => {
   // if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
 
   // res.cookie('jwt', token, cookieOptions);
-
   res.cookie('jwt', token, {
     expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000),
     httpOnly: true,
-    // eslint-disable-next-line no-undef
+    // this is for heroku set up
+
     secure: req.secure || req.headers['x-forwarded-proto'] === 'https',
     // secure: req.secure || req.get('x-forwarded-proto') === 'https',
   });
@@ -58,10 +58,10 @@ exports.signup = catchAsync(async (req, res, next) => {
 
   const url = `${req.protocol}://${req.get('host')}/me`;
   // const url = `${req.protocol}://localhost:3000/me`;
-  console.log(url);
+  // console.log(url);
   await new Email(newUser, url).sendWelcome();
 
-  createSendToken(newUser, 201, res);
+  createSendToken(newUser, 201, req, res);
 });
 
 exports.login = catchAsync(async (req, res, next) => {
@@ -80,7 +80,7 @@ exports.login = catchAsync(async (req, res, next) => {
   }
 
   // 3) If everything ok, send token to client
-  createSendToken(user, 200, res);
+  createSendToken(user, 200, req, res);
 });
 
 exports.logout = (req, res) => {
@@ -231,7 +231,7 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
 
   // 3) Update changedPasswordAt property for the user
   // 4) Log the user in, send JWT
-  createSendToken(user, 200, res);
+  createSendToken(user, 200, req, res);
 });
 
 exports.updatePassword = catchAsync(async (req, res, next) => {
@@ -251,5 +251,5 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
   // don't use update for anything related to password
 
   // 4) Log user in, send JWT
-  createSendToken(user, 200, res);
+  createSendToken(user, 200, req, res);
 });
