@@ -4,6 +4,9 @@ const { login, logout } = require('./login.js');
 const { updateSettings } = require('./update');
 const { bookTour } = require('./stripe.js');
 
+// import 'core-js/stable';
+const reg = require('regenerator-runtime/runtime');
+
 // console.log('Hello from index.js');
 
 //======= MAP =======
