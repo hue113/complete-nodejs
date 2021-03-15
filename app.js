@@ -31,14 +31,14 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Implement CORS
-app.use(cors());
-// app.use(
-//   cors({
-//     origin: 'http://localhost:3000',
-//     // origin: true,
-//     credentials: true,
-//   }),
-// );
+// app.use(cors());
+app.use(
+  cors({
+    origin: 'http://localhost:3000',
+    // origin: true,
+    credentials: true,
+  }),
+);
 app.options('*', cors());
 // app.options('/api/v1/tours/:id', cors());
 
