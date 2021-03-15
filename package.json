@@ -4,12 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon server.js",
+    "start": "node server.js",
+    "start:dev": "nodemon server.js",
     "start:prod": "NODE_ENV=production nodemon server.js",
     "browserify": "browserify public/js/index.js --debug -d -o | uglifyjs > public/js/bundle.js",
-    "debug": "ndb server.js",
-    "watch:js": "parcel watch ./public/js/index.js --out-dir ./public/js --out-file bundle.js --public-url ./js",
-    "build:js": "parcel watch ./public/js/index.js --out-dir ./public/js --out-file bundle.js --public-url ./js"
+    "debug": "ndb server.js"
   },
   "author": "Hue Pham",
   "license": "ISC",
